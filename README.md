@@ -36,8 +36,8 @@ F --> G[返回响应+统计]
 ### 4. 可视化控制台
 - Gradio网页界面（`gradio_app.py`实现）
 - 双标签页设计：
-  - **API配置页**：密钥管理+项目设置
-  - **聊天助手页**：技术问答+实时分析
+  - **控制面板**：密钥管理+项目设置 ![image](imgs/control panel.png)
+  - **聊天窗口**：技术问答+实时分析 ![image](imgs/chat.png)
 - 历史项目记忆（`projects_history.json`自动保存）
 
 ### 5. 智能问答系统
@@ -52,17 +52,19 @@ F --> G[返回响应+统计]
     python gradio_app.py
 
 ```
-3. 访问界面
-浏览器打开 http://localhost:7860
+浏览器打开 http://localhost:7860 ，启动图形化界面
 
 ### 操作流程
-1. **配置页面**（API配置标签页）
-   - 输入DeepSeek API密钥（双密钥支持）
-   - 设置项目根目录（绝对路径）
-   - 选择文件类型（默认`.py,.js,.java`等）
-   - 点击"应用配置"初始化
-
-2. **分析页面**（聊天助手标签页）
+1. **配置页面**（控制面板）
+   - 选择历史项目：
+     - 自动填充信息
+   - 或分析新项目：
+     - 输入DeepSeek API密钥（建议输入两个不同密钥）[双密钥](#-注意事项)
+     - 设置项目根目录（绝对路径）
+     - 选择文件类型（默认`.py,.js,.java`等）
+     - 点击"应用配置"初始化
+   
+2. **分析页面**（聊天窗口）
    ```python
    # 示例问题：
    "用户登录功能如何实现？"
@@ -116,12 +118,12 @@ Python 3.8+
 
 ### 持久化存储
 ```tree
-被我访问过的项目根目录/
+被访问过的项目的根目录/
 ├── .aide_doc/                  # 自动生成
 │   ├── summaries/              # 详细摘要
 │   └── summary_index.json      # 摘要索引（含文件哈希）
 ├── ...
-└── ...
+...
 ```
 
 ## 💡 技术实现
@@ -142,13 +144,11 @@ def analyze(user_input, chat_history, scan_files, load_files):
   4. 结合摘要+文件内容生成回答
   5. 返回响应+统计信息
 ```
+![image](imgs/log.png)
 
 ## 📁 项目结构
 ```
 smart-dev-assistant/
-├── .aide_doc/                  # 自动生成（代码摘要）
-│   ├── summaries/              # 按路径存储的摘要文件
-│   └── summary_index.json      # 文件哈希索引
 ├── history_information/        # 历史配置（自动创建）
 │   └── projects_history.json   # 加密的项目配置记录
 ├── gradio_app.py               # 主界面（1400+行GUI逻辑）

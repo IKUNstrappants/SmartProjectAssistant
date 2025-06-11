@@ -134,14 +134,14 @@ def chat_with_ai(message, chat_history, scan_files, load_files):
 
 # 创建界面
 with gr.Blocks(title="项目小精灵", theme=gr.themes.Soft()) as demo:
-    gr.Markdown("# 控制面板")
+    gr.Markdown("# 智能项目助手")
 
     # 持久化存储状态
     api_key_state = gr.State()
     project_root_state = gr.State()
 
     # API配置面板
-    with gr.Tab("API配置"):
+    with gr.Tab("控制面板"):
         with gr.Row():
             with gr.Column(scale=1):
                 gr.Markdown("### 基本设置")
