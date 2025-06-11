@@ -36,7 +36,7 @@ F --> G[返回响应+统计]
 ### 4. 可视化控制台
 - Gradio网页界面（`gradio_app.py`实现）
 - 双标签页设计：
-  - **控制面板**：密钥管理+项目设置 ![image](imgs/control panel.png)
+  - **控制面板**：密钥管理+项目设置 ![image](imgs/control_panel.png)
   - **聊天窗口**：技术问答+实时分析 ![image](imgs/chat.png)
 - 历史项目记忆（`projects_history.json`自动保存）
 
