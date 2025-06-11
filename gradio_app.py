@@ -133,8 +133,8 @@ def chat_with_ai(message, chat_history, scan_files, load_files):
         return f"请求处理失败: {str(e)}"
 
 # 创建界面
-with gr.Blocks(title="智能API助手", theme=gr.themes.Soft()) as demo:
-    gr.Markdown("# 🚀 智能项目助手控制面板")
+with gr.Blocks(title="项目小精灵", theme=gr.themes.Soft()) as demo:
+    gr.Markdown("# 控制面板")
 
     # 持久化存储状态
     api_key_state = gr.State()
@@ -207,7 +207,7 @@ with gr.Blocks(title="智能API助手", theme=gr.themes.Soft()) as demo:
             reset_btn = gr.Button("重置配置", variant="stop")
 
     # 聊天助手面板
-    with gr.Tab("聊天助手"):
+    with gr.Tab("聊天窗口"):
         chatbot = gr.Chatbot(
             label="对话记录",
             height=600,
@@ -294,11 +294,27 @@ with gr.Blocks(title="智能API助手", theme=gr.themes.Soft()) as demo:
     # 当选择历史项目时自动填充路径
     def on_project_selected(project_path):
         if not project_path:
-            return gr.Textbox(value=""), gr.Checkbox(value=False)
+            return gr.Textbox(value=""), gr.Textbox(value=""), gr.Textbox(value=""), gr.Checkbox(value=False)
 
         # 提取实际路径（去掉时间戳部分）
         actual_path = project_path.split(" (最后使用:")[0].strip()
-        return gr.Textbox(value=actual_path), gr.Checkbox(value=True)
+        projects_history = load_projects_history()
+        project_data = projects_history.get(actual_path, {})
+
+        return (
+            gr.Textbox(value=actual_path),  # 项目路径
+            gr.Textbox(value=project_data.get("assistant_api_key", "")),  # API密钥01
+            gr.Textbox(value=project_data.get("summarizer_api_key", "")),  # API密钥02
+            gr.Checkbox(value=True)  # 加载历史配置
+        )
+
+
+    # 修改 history_projects.change 事件绑定
+    history_projects.change(
+        on_project_selected,
+        inputs=[history_projects],
+        outputs=[project_root, api_key_assistant, api_key_summarize, load_history]
+    )
 
 
     # 绑定事件
@@ -306,12 +322,6 @@ with gr.Blocks(title="智能API助手", theme=gr.themes.Soft()) as demo:
         refresh_history_projects,
         inputs=[],
         outputs=[history_projects]
-    )
-
-    history_projects.change(
-        on_project_selected,
-        inputs=[history_projects],
-        outputs=[project_root, load_history]
     )
 
     # 在应用启动时自动加载历史项目
