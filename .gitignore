@@ -1,0 +1,7 @@
+.aide_doc
+venv
+.idea
+history_information
+build
+dist
+__pycache__
